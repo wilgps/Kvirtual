@@ -1,0 +1,24 @@
+{ 
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "spec": {
+    "outputDirectory": "./src",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "swagger": {
+    "outputDirectory": "./src",
+    "entryFile": "./src/index.ts"   
+  },
+  "routes": {
+    "routesDir": "./src",
+    "authenticationModule": "./src/authentication.ts"
+  }
+}

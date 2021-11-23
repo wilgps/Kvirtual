@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start",
+			"problemMatcher": [],
+			"label": "npm: start",
+			"detail": "ts-node-dev --respawn --pretty --transpile-only src/index.ts"
+		},
+		{
+			"type": "npm",
+			"script": "prestart",
+			"problemMatcher": [],
+			"label": "npm: prestart",
+			"detail": "npm run build"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "tsc"
+		},
+		{
+			"type": "npm",
+			"script": "tsc:build",
+			"group": "rebuild",
+			"problemMatcher": [],
+			"label": "npm: tsc:build",
+			"detail": "ts-node-dev --respawn --transpile-only --debug ./src/index.ts"
+		}
+	]
+}

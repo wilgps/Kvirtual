@@ -1,0 +1,365 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"AuthResponseDto": {
+				"properties": {
+					"token": {
+						"type": "string"
+					},
+					"expires": {
+						"type": "number",
+						"format": "double"
+					},
+					"scope": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"token",
+					"expires",
+					"scope"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthRequestDto": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserResponse": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Name": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Id",
+					"Name",
+					"Email",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserInput": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Name": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Id",
+					"Name",
+					"Email",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUser": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Name": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Id",
+					"Name",
+					"Email",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VerbResponse": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Verb": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Verb"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VerbRequest": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Verb": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Verb"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"bearer": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "kvirtual",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/Auth": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthRequestDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/MathGame": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"MathGame"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/user/{userId}": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"bearer": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "name",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/user": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Created"
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserInput"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IUser"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/verb": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/VerbResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"verb"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"verb"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"items": {
+									"$ref": "#/components/schemas/VerbRequest"
+								},
+								"type": "array"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
