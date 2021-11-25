@@ -1,9 +1,15 @@
 import React from "react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 import { Row, Container, Col, Button } from "react-bootstrap";
-import { DndComponent, DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import Hearts from "../../components/hearts";
 import { IVerb } from "../../models/verbs";
 import api from "../../services/Api";
+import PointService from "../../services/PointsService";
 import "./index.css";
 interface PortugueseGameProps {}
 
@@ -12,6 +18,7 @@ interface PortugueseGameState {
   points: number;
   lifes: number;
   currentVerb: string[];
+  currentVerbAnswer: string;
   usedVerb: number[];
 }
 
@@ -29,9 +36,13 @@ class PortugueseGame extends React.Component<
       points: 0,
       lifes: 5,
       currentVerb: [],
+      currentVerbAnswer: "",
       usedVerb: [],
     };
+    this.Session = new PointService(this.GameName);
   }
+  GameName = "Portuguese";
+  Session: PointService;
   componentDidMount = () => {
     this.getVerbs();
   };
@@ -56,6 +67,7 @@ class PortugueseGame extends React.Component<
     }
     const idx = Math.floor(Math.random() * nums.length);
     this.setState({
+      currentVerbAnswer: this.state.verbs[idx].Verb,
       currentVerb: Array.from(this.shotVerb(this.state.verbs[idx].Verb)),
     });
   };
@@ -74,13 +86,66 @@ class PortugueseGame extends React.Component<
   removeLifes = () => {
     this.setState({ lifes: this.state.lifes - 1 });
   };
-
-  startGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+  addPoint = () => {
+    this.Session.SavePoints(this.state.points + 1);
+    this.setState({ points: this.state.points + 1 });    
+  };
+  startGame = () => {
     this.resetLifes();
-    this.setState({ usedVerb: [] });
+    this.setState({
+      usedVerb: [],
+      currentVerbAnswer: "",
+      currentVerb: [],
+    });
+    this.Session = new PointService(this.GameName);
+    this.setRandomVerb();
+  };
+  finishGame = () => {
+    this.resetLifes();
+    this.setState({
+      usedVerb: [],
+      currentVerbAnswer: "",
+      currentVerb: [],
+    });
+    this.Session = new PointService(this.GameName);
+  };
+
+  nextVerb = () => {
     this.setRandomVerb();
   };
 
+  reorder = (list: any[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
+  onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    const items = this.reorder(
+      this.state.currentVerb,
+      result.source.index,
+      result.destination.index
+    );
+
+    this.setState({ currentVerb: items });
+  };
+  handleCheckVerb = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (this.state.currentVerb.join("") === this.state.currentVerbAnswer) {
+      this.addPoint();
+      this.nextVerb();
+    } else {
+      this.removeLifes();
+      if (this.state.lifes > 1) alert("Resposta erra tente novamente.");
+      else {
+        alert("Acabaram suas vidas 😓;");
+        this.finishGame();
+      }
+    }
+  };
   render() {
     return (
       <React.Fragment>
@@ -92,7 +157,7 @@ class PortugueseGame extends React.Component<
                   <Col md={12}>
                     Clique em começar para iniciar o jogo.
                     <br />
-                    <Button variant="primary" onClick={this.startGame}>
+                    <Button variant="primary" onClick={(e) => this.startGame()}>
                       Começar
                     </Button>
                   </Col>
@@ -101,7 +166,10 @@ class PortugueseGame extends React.Component<
               {this.state.currentVerb.length !== 0 && (
                 <Row>
                   <Col md={12}>
-                    <span>Vidas: {this.state.lifes}</span>
+                    <span>
+                      Vidas:
+                      <Hearts num={this.state.lifes} />{" "}
+                    </span>
                     <br />
                     <br />
                     <span>Pontos: {this.state.points}</span>
@@ -109,19 +177,54 @@ class PortugueseGame extends React.Component<
                     <br />
                     <fieldset className="phrase-game">
                       <legend>Coloque a palavra em ordem</legend>
-                      <div className="letters">
-                        <DndProvider backend={HTML5Backend}>
-                          {this.state.currentVerb.map((x, i) => (
-                            <span key={i} className="item drag-drop">
-                              {x}
-                            </span>
-                          ))}
-                        </DndProvider>
-                      </div>
+
+                      <DragDropContext onDragEnd={this.onDragEnd}>
+                        <Droppable
+                          droppableId="usedVerb"
+                          direction="horizontal"
+                        >
+                          {(provided) => (
+                            <div
+                              className="letters"
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                            >
+                              {this.state.currentVerb.map(
+                                (item, index: any) => {
+                                  return (
+                                    <Draggable
+                                      key={index}
+                                      draggableId={item + "_" + index}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => (
+                                        <span
+                                          className="item"
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                        >
+                                          {item}
+                                        </span>
+                                      )}
+                                    </Draggable>
+                                  );
+                                }
+                              )}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
+
                       <br />
-                      <div className="result"></div>
                       <br />
-                      <Button variant="outline-success">Checar</Button>
+                      <Button
+                        variant="outline-success"
+                        onClick={this.handleCheckVerb}
+                      >
+                        Checar
+                      </Button>
                     </fieldset>
                   </Col>
                 </Row>

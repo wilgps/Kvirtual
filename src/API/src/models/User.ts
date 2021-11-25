@@ -2,7 +2,7 @@ import Sequelize, { Model } from "sequelize";
 import db from "../data/db";
 
 class User extends Sequelize.Model implements IUser {
-  Id: number;
+  Id?: number;
   Name: string;
   Email: string;
   Password: string;
@@ -48,7 +48,7 @@ User.init(
 );
 
 export interface IUser {
-  Id: number;
+  Id?: number;
   Name: string;
   Email: string;
   Password: string;

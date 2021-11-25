@@ -1,7 +1,8 @@
 import React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import RegisterComponent from "../../components/Register";
 import "./index.css";
-interface RegisterPageProps {}
+interface RegisterPageProps extends RouteComponentProps {}
 
 interface RegisterPageState {}
 
@@ -13,12 +14,21 @@ class RegisterPage extends React.Component<
     super(props);
     this.state = {};
   }
+  handleRedirect = () => {
+    const { history } = this.props;
+    let url = "/";
+    history.push(url);
+  };
   render() {
     return (
       <div className="page">
         <div className="page-container register-container">
           <div className="container">
-            <RegisterComponent></RegisterComponent>
+            <RegisterComponent
+              finished={() => {
+                this.handleRedirect();
+              }}
+            ></RegisterComponent>
           </div>
         </div>
       </div>
@@ -26,4 +36,4 @@ class RegisterPage extends React.Component<
   }
 }
 
-export default RegisterPage;
+export default withRouter(RegisterPage);

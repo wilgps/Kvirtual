@@ -14,12 +14,24 @@ import "./index.css";
 import { isAdmin, logout } from "../../services/Auth";
 interface FooterComponentProps {}
 
-interface FooterComponentState {}
+interface FooterComponentState {
+  isAdmin: boolean;
+}
 
 class FooterComponent extends React.Component<
   FooterComponentProps,
   FooterComponentState
 > {
+  /**
+   *
+   */
+  constructor(props:any) {
+    super(props);
+    this.state = { isAdmin: false };
+  }
+  componentDidMount = () => {
+    this.setState({ isAdmin });
+  };
   handlerOnclickUser = (e: any) => {
     e.preventDefault();
   };
@@ -36,7 +48,7 @@ class FooterComponent extends React.Component<
       </Popover.Body>
     </Popover>
   );
- 
+
   render() {
     return (
       <React.Fragment>
@@ -51,7 +63,7 @@ class FooterComponent extends React.Component<
                 <Nav.Link as={Link} to="/">
                   Home
                 </Nav.Link>
-                {isAdmin && (
+                {this.state.isAdmin && (
                   <Nav.Link as={Link} to="/admin">
                     Admin
                   </Nav.Link>

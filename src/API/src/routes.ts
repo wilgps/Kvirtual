@@ -37,6 +37,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IPointResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "Id": {"dataType":"double"},
+            "UserId": {"dataType":"double","required":true},
+            "Points": {"dataType":"double","required":true},
+            "GameName": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IPointRequest": {
+        "dataType": "refObject",
+        "properties": {
+            "Id": {"dataType":"double"},
+            "Points": {"dataType":"double","required":true},
+            "GameName": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserResponse": {
         "dataType": "refObject",
         "properties": {
@@ -51,7 +72,7 @@ const models: TsoaRoute.Models = {
     "UserInput": {
         "dataType": "refObject",
         "properties": {
-            "Id": {"dataType":"double","required":true},
+            "Id": {"dataType":"double"},
             "Name": {"dataType":"string","required":true},
             "Email": {"dataType":"string","required":true},
             "Password": {"dataType":"string","required":true},
@@ -62,7 +83,7 @@ const models: TsoaRoute.Models = {
     "IUser": {
         "dataType": "refObject",
         "properties": {
-            "Id": {"dataType":"double","required":true},
+            "Id": {"dataType":"double"},
             "Name": {"dataType":"string","required":true},
             "Email": {"dataType":"string","required":true},
             "Password": {"dataType":"string","required":true},
@@ -121,10 +142,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/MathGame',
+        app.get('/Points',
 
             function PointsController_Get(request: any, response: any, next: any) {
             const args = {
+                    game: {"in":"query","name":"game","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -137,6 +159,30 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.Get.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/Points',
+
+            function PointsController_Post(request: any, response: any, next: any) {
+            const args = {
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                    body: {"in":"body","name":"body","required":true,"ref":"IPointRequest"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new PointsController();
+
+
+              const promise = controller.Post.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -195,7 +241,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function UserController_Get(request: any, response: any, next: any) {
             const args = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

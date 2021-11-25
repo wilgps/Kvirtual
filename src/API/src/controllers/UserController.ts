@@ -16,6 +16,7 @@ import {
 } from "tsoa";
 import { IUser } from "../models/user";
 import express from "express";
+import { TokenHelper } from "../helpers/TokenHelper";
 
 @Route("/user")
 @Tags("User")
@@ -36,14 +37,17 @@ export class UserController extends Controller {
   }
 
   @Get()
-  public async Get(@Request() request: express.Request): Promise<IUser> {
-    const kiko = request.headers.authorization;
-    return null;
+  public async Get(@Request() req: express.Request): Promise<IUser> {
+    const id = new TokenHelper(process.env.SECRET).GetPayload(
+      req.headers.authorization,
+      "Id"
+    );
+    return new UserService().GetUserById(id);
   }
 }
 
 interface UserInput {
-  Id: number;
+  Id?: number;
   Name: string;
   Email: string;
   Password: string;

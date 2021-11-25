@@ -1,22 +1,36 @@
 import React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import Register from "../../components/Register";
 import { IUser } from "../../models/user";
 import api from "../../services/Api";
 
-interface UpdateUserProps {}
+interface UpdateUserProps extends RouteComponentProps {}
 
 interface UpdateUserState {
   user: IUser;
 }
 
 class UpdateUser extends React.Component<UpdateUserProps, UpdateUserState> {
-  componentDidMount = () => {
-    this.getCurrentUser();
+  /**
+   *
+   */
+
+  constructor(props: any) {
+    super(props);
+    this.state = { user: {} as IUser };
+  }
+  handleRedirect = () => {
+    const { history } = this.props;
+    let url = "/";
+    history.push(url);
+  };
+  componentDidMount = async () => {
+    await this.getCurrentUser();
   };
   getCurrentUser = async () => {
     try {
       const response = await api.get("/user");
-      console.log(response);
+      this.setState({ user: response.data });
       // response.data;
     } catch (error) {}
   };
@@ -25,7 +39,12 @@ class UpdateUser extends React.Component<UpdateUserProps, UpdateUserState> {
       <div className="page">
         <div className="page-container register-container">
           <div className="container">
-            <Register></Register>
+            <Register
+              user={this.state.user}
+              finished={() => {
+                this.handleRedirect();
+              }}
+            ></Register>
           </div>
         </div>
       </div>
@@ -33,4 +52,4 @@ class UpdateUser extends React.Component<UpdateUserProps, UpdateUserState> {
   }
 }
 
-export default UpdateUser;
+export default withRouter(UpdateUser);

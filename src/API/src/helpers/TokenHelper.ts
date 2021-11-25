@@ -14,4 +14,11 @@ export class TokenHelper {
     });
     return token;
   }
+  public GetPayload(strtoken: string, key: string): any {
+    const bearer = strtoken.split(" ");
+    const token = bearer[1];
+
+    const decode: any = jwt.decode(token);
+    return decode[key];
+  }
 }

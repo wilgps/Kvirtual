@@ -43,6 +43,53 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IPointResponse": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"UserId": {
+						"type": "number",
+						"format": "double"
+					},
+					"Points": {
+						"type": "number",
+						"format": "double"
+					},
+					"GameName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"UserId",
+					"Points",
+					"GameName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IPointRequest": {
+				"properties": {
+					"Id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Points": {
+						"type": "number",
+						"format": "double"
+					},
+					"GameName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Points",
+					"GameName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserResponse": {
 				"properties": {
 					"Id": {
@@ -85,7 +132,6 @@
 					}
 				},
 				"required": [
-					"Id",
 					"Name",
 					"Email",
 					"Password"
@@ -110,7 +156,6 @@
 					}
 				},
 				"required": [
-					"Id",
 					"Name",
 					"Email",
 					"Password"
@@ -201,19 +246,68 @@
 				}
 			}
 		},
-		"/MathGame": {
+		"/Points": {
 			"get": {
 				"operationId": "Get",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IPointResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
 					}
 				},
 				"tags": [
-					"MathGame"
+					"Points"
 				],
 				"security": [],
-				"parameters": []
+				"parameters": [
+					{
+						"in": "query",
+						"name": "game",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IPointResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Points"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IPointRequest"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/user/{userId}": {

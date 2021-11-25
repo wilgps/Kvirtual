@@ -1,6 +1,6 @@
 .phrase-game .letters {
     border: 1px solid #babaca;
-    display: inline-block;
+    display: inline-flex;
     padding: 10px;
 }
 
