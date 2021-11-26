@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 const db = new Sequelize.Sequelize({
   dialect: "sqlite",
-  storage: "./database.sqlite",
+  storage: "./database/database.sqlite",
 });
 const sync = async () => {
   try {

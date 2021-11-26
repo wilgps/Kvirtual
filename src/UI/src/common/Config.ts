@@ -1,3 +1,4 @@
 export const Configs = {
-    BaseUrl : "http://127.0.0.1:3332"
+  BaseUrl:process.env.REACT_APP_URLAPI,
 };
+ 
